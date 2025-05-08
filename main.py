@@ -19,15 +19,6 @@ paddle = Paddle((0, -270))
 ball = Ball()
 scoreboard = Scoreboard()
 
-# brick_colors = ["red", "orange", "yellow", "green"]
-# brick_width = 60
-# brick_height = 40
-
-# for j in range(4):
-#     for x in range(-350, 380, brick_width):
-#         y = 200 - (j * (brick_height))
-#         brick = Brick(x, y, brick_colors[j])
-
 brick_colors = ["red", "orange", "yellow", "green"]
 brick_widths = [40, 60, 80]
 bricks = Brick.create_wall(brick_colors, brick_widths)
@@ -35,8 +26,9 @@ bricks = Brick.create_wall(brick_colors, brick_widths)
 screen.listen()
 screen.onkey(paddle.go_right, "Right")
 screen.onkey(paddle.go_left, "Left")
-pygame.mixer.init()
+
 # Load sound effects
+pygame.mixer.init()
 paddle_hit = pygame.mixer.Sound("./sound_effects/paddle_hit.wav")
 wall_hit = pygame.mixer.Sound("./sound_effects/wall_hit.wav")
 rock_hit = pygame.mixer.Sound("./sound_effects/rock_hit.mp3")
@@ -61,7 +53,7 @@ while game_is_on:
     # Detect collision with top wall
     if ball.ycor() > 280:
         ball.bounce_y()
-        wall_hit.play()    
+        wall_hit.play()
 
     # Detect collision with paddle
     if ball.distance(paddle) < 100 and ball.ycor() < -240:
@@ -73,9 +65,14 @@ while game_is_on:
         brick_width = brick.shapesize()[1] * 20
         brick_height = brick.shapesize()[0] * 20
 
-        if (brick.xcor() - brick_width / 2 - 11 < ball.xcor() < brick.xcor() + brick_width / 2 + 11 and
-            brick.ycor() - brick_height / 2 - 11 < ball.ycor() < brick.ycor() + brick_height / 2 + 11):
-            
+        if (
+            brick.xcor() - brick_width / 2 - 11
+            < ball.xcor()
+            < brick.xcor() + brick_width / 2 + 11
+            and brick.ycor() - brick_height / 2 - 11
+            < ball.ycor()
+            < brick.ycor() + brick_height / 2 + 11
+        ):
             x_diff = abs(ball.xcor() - brick.xcor())
             y_diff = abs(ball.ycor() - brick.ycor())
 
@@ -83,7 +80,7 @@ while game_is_on:
                 ball.bounce_y()
             else:
                 ball.bounce_x()
-            
+
             brick.destroy()
             rock_hit.play()
             brick_hit_count += 1
@@ -121,12 +118,12 @@ while game_is_on:
             brick_colors = ["red", "orange", "yellow", "green"]
             bricks = Brick.create_wall(brick_colors, brick_widths)
         time.sleep(0.5)
-        
+
     if scoreboard.miss == MAX_MISSED_BALLS:
         game_is_on = False
         game_over.play()
         scoreboard.game_over()
         ball.hideturtle()
-        
+
 
 screen.exitonclick()
